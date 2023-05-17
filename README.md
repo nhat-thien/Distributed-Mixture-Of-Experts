@@ -1,5 +1,5 @@
-# Distributed-Mixture-Of-Experts
-Matlab code for the implementations in the paper Distributed Learning of Mixtures of Experts For Regression [1].
+# Distributed Learning of Mixtures of Experts For Regression
+Matlab codes for the implementations in the submitted paper Distributed Learning of Mixtures of Experts For Regression [1].
 
 ## Environment
 Matlab R2018b. In our code, we also used `parfor` loop which requires there are more than one core to be affect. To check the number of physical cores, in Command Window, run `evalc("feature('numcores')")`
@@ -10,7 +10,7 @@ Matlab R2018b. In our code, we also used `parfor` loop which requires there are 
 #### Input
 - `X_train`: matrix of size `m-by-d`, where `m` is the number of individuals, `d` is the number of feature
 - `Y_train`: vector of size `m-by-1`
-- `K`: the number of experts
+- `K`: the number of experts, supposed to be greater than one
 - `M`: the number of machines, supposed to be greater than one
 - `options`: the struct contains options for the algorithm. Set `options = get_options('default')` to use the default ones.
 
