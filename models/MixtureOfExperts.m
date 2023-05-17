@@ -3,7 +3,7 @@ function solution = MixtureOfExperts(X, y, K, options)
 %--------------------------------------------------------------------------
 % Fits a functional softmax-gated mixture-of-experts by the EM algorithm.
 %
-% by Faicel Chamroukhi, Thien N. Pham
+% by Faicel Chamroukhi, Thien Pham
 %--------------------------------------------------------------------------
 
 warning off
