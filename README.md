@@ -36,5 +36,5 @@ Adjusted RI    : 0.825
 ClusteringErr  : 7.582 (%)
 ```
 ## References
-[1] Anonymous authors, Distributed Learning of Mixtures of Experts, *submitted to NeurIPS 2023*.
+[1] Anonymous authors, Distributed Learning of Mixtures of Experts, *submitted to AISTATS 2024*.
 
