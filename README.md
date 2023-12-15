@@ -36,5 +36,4 @@ Adjusted RI    : 0.825
 ClusteringErr  : 7.582 (%)
 ```
 ## References
-[1] Anonymous authors, Distributed Learning of Mixtures of Experts, *submitted to AISTATS 2024*.
-
+[1] Faicel Chamroukhi, Nhat Thien Pham, Distributed Learning of Mixtures of Experts. ArXiv 2023.
