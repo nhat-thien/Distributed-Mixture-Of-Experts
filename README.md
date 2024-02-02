@@ -36,4 +36,4 @@ Adjusted RI    : 0.825
 ClusteringErr  : 7.582 (%)
 ```
 ## References
-[1] Faïcel Chamroukhi, Nhat Thien Pham, Distributed Learning of Mixtures of Experts. ArXiv 2023.
+[1] Faïcel Chamroukhi, Nhat Thien Pham, Distributed Learning of Mixtures of Experts. Preprint arXiv:2312.09877, Dec 2023.
