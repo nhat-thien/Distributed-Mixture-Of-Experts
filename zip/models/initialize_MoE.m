@@ -36,7 +36,7 @@ end
 %     
 %% Intialise Expert Network's parameters
 switch expert_type
-    case 'Gaussian' %Gaussian experts for regression
+    case 'Gaussian' %Gaussian experts for regression problems
         beta0 = zeros(1,K);
         Beta = zeros(p, K);
         sigma2 = zeros(1,K);
@@ -55,7 +55,7 @@ switch expert_type
         end
         [beta0, Beta, alpha0, Alpha, sigma2] = identify_network(beta0, Beta, alpha0, Alpha, sigma2);
         
-    case 'softmax' %softmax expert for classification
+    case 'softmax' %softmax expert for classification problem
 
         beta0  = rand(K,G);
         Beta   = rand(p,G,K);

@@ -35,7 +35,7 @@ function [plan, distance_matrix] = argmin_transportation_plan(large_mixture, red
             expert2.xBeta =  reduced_mixture.experts(:,k);
             expert2.sigma2 = reduced_mixture.variances(k);
 
-            [~, KLdisvec] = KL_divergence(expert1, expert2, X_val);
+            [~, KLdisvec] = KL_distance(expert1, expert2, X_val);
             distance_matrix(l,k,:) = KLdisvec;
         end
         

@@ -1,4 +1,4 @@
-# Optimal Transport Aggregation for Distributed Mixture-of-Experts
+# Distributed Learning of Mixtures of Experts
 Matlab source codes for the "Optimal Transport Aggregation for Distributed Mixture-of-Experts" [1].
 
 ## Environment

@@ -3,8 +3,8 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
     chi    = .1*ones(1,K-1);
     lambda = ones(1,K);
     
-    IRLS_max_iter = 1000;
-    IRLS_threshold = 1e-6;
+    IRLS_max_iter = 10000;
+    IRLS_threshold = 1e-8;
     IRLS_verbose = 0;
     
     [n,d] = size(X);
@@ -116,7 +116,7 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
 
 
         
-        %We keep looping until the transportation_divergence between the 
+        %We keep looping until the transportation_distance between the 
         %large_mixture and the reduced_mixture is stable.
         %-----------------------------
         while (~converged) && (iteration < options.DME_maxiter)
@@ -124,7 +124,7 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
             %The plan of transporting large_mixture to reduced_mixture
             [plan, distance_matrix] = argmin_transportation_plan(large_mixture, reduced_mixture, X_val);
 
-            %Given the plan, compute the transportation_divergence
+            %Given the plan, compute the transportation_distance
             transportdis = sum(sum(sum(plan .* distance_matrix)));
             
             if options.DME_verbose, fprintf('Iteration %i: Transportation distance (obj. func.): %.5f\n', iteration, transportdis); end
@@ -144,7 +144,7 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
         
         
         
-        %Now, transportation_divergence is converged. We estimate the gates
+        %Now, transportation_distance is converged. We estimate the gates
         %using IRLS algorithm
         %----------------------------------------------------------------
 
