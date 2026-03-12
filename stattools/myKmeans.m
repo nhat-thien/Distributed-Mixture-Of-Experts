@@ -1,9 +1,9 @@
 function solution = myKmeans(X, K, nbr_runs, nbr_iter_max, verbose)
 %   function res = myKmeans(X, K, nbr_runs, nbr_iter_max, verbose)
 %
-%   Algorithme des K-means
+%   K-means algorithm
 %
-% distance euclidienne
+%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if nargin<5; verbose=0;end
@@ -87,6 +87,6 @@ while (nbr_run<nbr_runs)
     if current_err < best_solution.err
         best_solution = solution;
     end
-end %en of the Kmeans runs
+end %end of the Kmeans runs
 
 solution = best_solution;

@@ -91,9 +91,7 @@ while (~converge && (iter< max_iter))
         fprintf(1,'Coord. Asc. Softmax: iter : %d Q_chi: %f \n',iter, loglik);
     end
 
-    converge = abs(loglik-prev_loglik) < threshold; %|| abs((loglik-prev_loglik)/prev_loglik) < threshold;
-%     converge = all(max(abs(W - W_old)) <= threshold); %|| abs((loglik-prev_loglik)/prev_loglik) < threshold;
-%     converge = norm(W(:) - W_old(:), inf) <= threshold;
+    converge = abs(loglik-prev_loglik) <= threshold;
 
     prev_loglik = loglik;   
     iter=iter+1;
