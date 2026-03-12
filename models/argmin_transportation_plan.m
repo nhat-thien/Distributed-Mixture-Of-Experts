@@ -9,12 +9,12 @@ function [plan, distance_matrix] = argmin_transportation_plan(large_mixture, red
         large_mixture.gates = repmat(large_mixture.gates(:),1,K);
     end
 
-    %Compute PI_hat for each x in X_S
+    % Compute PI_hat for each x in X_S
     PI_hat  = [];
     for m=1:M
         X_val_times_Gate = X_val*reshape(large_mixture.gates(:,m*K),d,K);
-        maxx             = max(X_val_times_Gate, [], 2);
-        X_val_times_Gate = X_val_times_Gate - maxx;
+        max_x             = max(X_val_times_Gate, [], 2);
+        X_val_times_Gate = X_val_times_Gate - max_x;
         exp_X_val_times_Gate = exp(X_val_times_Gate);
         PI_temp = exp_X_val_times_Gate ./ sum(exp_X_val_times_Gate,2);
         PI_hat = [PI_hat PI_temp];
@@ -41,10 +41,10 @@ function [plan, distance_matrix] = argmin_transportation_plan(large_mixture, red
         
     end
     
-    %Assign plan for each x in X_S
+    % Assign plan for each x in X_S
     plan  = zeros(L,K,S);
     
-    [~,mindis_index] = min(distance_matrix,[],2);
+    [~, mindis_index] = min(distance_matrix,[],2);
     mindis_index = squeeze(mindis_index);
     for l=1:L
         for k=1:K
