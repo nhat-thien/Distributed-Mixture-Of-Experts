@@ -1,14 +1,14 @@
-function red = param_MSE(estimated_mixture, true_mixture)
+function red = param_MSE(estimated_MoE, true_MoE)
 
-    [d,~] = size(true_mixture.experts);
+    [d,~] = size(true_MoE.experts);
 
-    Beta   = true_mixture.experts(:);
-    Alpha  = true_mixture.gates(:);
-    sigma2 = true_mixture.variances(:);
+    Beta   = true_MoE.experts(:);
+    Alpha  = true_MoE.gates(:);
+    sigma2 = true_MoE.variances(:);
 
-    Beta_est   = estimated_mixture.experts(:);
-    Alpha_est  = estimated_mixture.gates(:);
-    sigma2_est = estimated_mixture.variances(:);
+    Beta_est   = estimated_MoE.experts(:);
+    Alpha_est  = estimated_MoE.gates(:);
+    sigma2_est = estimated_MoE.variances(:);
     
     
     param     = [Beta; sigma2; Alpha];

@@ -1,18 +1,18 @@
-function [plan, distance_matrix] = argmin_transportation_plan(large_mixture, reduced_mixture, X_val)
+function [plan, distance_matrix] = argmin_transportation_plan(large_MoE, reduced_MoE, X_val)
 
-    L  = length(large_mixture.variances);
-    K  = length(reduced_mixture.variances);
+    L  = length(large_MoE.variances);
+    K  = length(reduced_MoE.variances);
     [S,d] = size(X_val);
     M = L/K;
     
-    if size(large_mixture.gates,1) == d
-        large_mixture.gates = repmat(large_mixture.gates(:),1,K);
+    if size(large_MoE.gates,1) == d
+        large_MoE.gates = repmat(large_MoE.gates(:),1,K);
     end
 
     % Compute PI_hat for each x in X_S
     PI_hat  = [];
     for m=1:M
-        X_val_times_Gate = X_val*reshape(large_mixture.gates(:,m*K),d,K);
+        X_val_times_Gate = X_val*reshape(large_MoE.gates(:,m*K),d,K);
         max_x             = max(X_val_times_Gate, [], 2);
         X_val_times_Gate = X_val_times_Gate - max_x;
         exp_X_val_times_Gate = exp(X_val_times_Gate);
@@ -20,20 +20,20 @@ function [plan, distance_matrix] = argmin_transportation_plan(large_mixture, red
         PI_hat = [PI_hat PI_temp];
     end
     %Make sure sum(PI_hat,2) = [1,...,1]'
-    PI_hat = PI_hat.*large_mixture.weights;
+    PI_hat = PI_hat.*large_MoE.weights;
     PI_hat = PI_hat';
     
     %Compute the tensor of distances [L-K-S]
     distance_matrix = zeros(L,K,S);
     for l=1:L
         
-        expert1.xBeta  = large_mixture.experts(:,l);
-        expert1.sigma2 = large_mixture.variances(l);
+        expert1.xBeta  = large_MoE.experts(:,l);
+        expert1.sigma2 = large_MoE.variances(l);
         
         for k=1:K
             
-            expert2.xBeta =  reduced_mixture.experts(:,k);
-            expert2.sigma2 = reduced_mixture.variances(k);
+            expert2.xBeta =  reduced_MoE.experts(:,k);
+            expert2.sigma2 = reduced_MoE.variances(k);
 
             [~, KLdisvec] = KL_divergence(expert1, expert2, X_val);
             distance_matrix(l,k,:) = KLdisvec;
@@ -56,3 +56,4 @@ end
 
 
 
+MoE

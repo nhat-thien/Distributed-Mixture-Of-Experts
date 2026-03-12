@@ -1,7 +1,7 @@
-function [metrics, prediction] = compute_metrics(fit, true_mixture, X, Y, true_labels, verbose)
+function [metrics, prediction] = compute_metrics(fit, true_MoE, X, Y, true_labels, verbose)
 
     N = size(X,1);
-    K = length(true_mixture.variances);
+    K = length(true_MoE.variances);
     
     %======================================================================
     % FOR GLOBAL, DISTRIBUTED, MEDIAN AND AVERAGED ME MODELS
@@ -17,17 +17,17 @@ function [metrics, prediction] = compute_metrics(fit, true_mixture, X, Y, true_l
         %------------------------------------------------------------------
         %  COMPUTE TRANSPORTATION DISTANCE
         %------------------------------------------------------------------
-        if isfield(fit, 'reduced_mixture')
+        if isfield(fit, 'reduced_MoE')
             % For Global, Median and Average MoE
-            [plan, distance_matrix] = argmin_transportation_plan(fit.reduced_mixture, true_mixture, [ones(N,1) X]);
+            [plan, distance_matrix] = argmin_transportation_plan(fit.reduced_MoE, true_MoE, [ones(N,1) X]);
         else 
             % For Distributed MoE
-            [plan, distance_matrix] = argmin_transportation_plan(fit, true_mixture, [ones(N,1) X]);
+            [plan, distance_matrix] = argmin_transportation_plan(fit, true_MoE, [ones(N,1) X]);
         end
         
         trandis       = sum(sum(sum(plan .* distance_matrix)));
         learning_time = fit.learning_time;
-        mse_param     =  param_MSE(fit, true_mixture);
+        mse_param     =  param_MSE(fit, true_MoE);
         
 
         %------------------------------------------------------------------
@@ -72,7 +72,7 @@ function [metrics, prediction] = compute_metrics(fit, true_mixture, X, Y, true_l
 
         
     %======================================================================
-    % FOR MIXTURE OF LINEAR REGRESSION MODEL
+    % FOR MoE OF LINEAR REGRESSION MODEL
     % No gating functions
     % Do not compute transporttation distance, MSE_param
     %======================================================================

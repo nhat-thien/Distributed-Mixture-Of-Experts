@@ -66,7 +66,7 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
 
     end
 
-    %Now, we have a "large mixture of experts" contains KM components
+    %Now, we have a "large mixture" contains KM components
     large_MoE.experts   = experts;
     large_MoE.gates     = gates;
     large_MoE.variances = variances;
@@ -117,12 +117,12 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
 
         
         %We keep looping until the transportation_divergence between the 
-        %large_MoE and the reduced_MoE is stable.
+        %large_mixture and the reduced_mixture is stable.
         %-----------------------------
         while (~converged) && (iteration < options.DME_maxiter)
 
-            %The plan of transporting large_MoE to reduced_MoE
-            [plan, distance_matrix] = argmin_transportation_plan(large_MoE, reduced_MoE, X_val);
+            %The plan of transporting large_mixture to reduced_mixture
+            [plan, distance_matrix] = argmin_transportation_plan(large_mixture, reduced_mixture, X_val);
 
             %Given the plan, compute the transportation_divergence
             transportdis = sum(sum(sum(plan .* distance_matrix)));
@@ -130,8 +130,8 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
             if options.DME_verbose, fprintf('Iteration %i: Transportation distance (obj. func.): %.5f\n', iteration, transportdis); end
             stored_distances = [stored_distances transportdis];
             
-            %Find the optimal reduced_MoE given the plan
-            reduced_MoE = argmin_MoE(large_MoE, plan, X_val);
+            %Find the optimal reduced_mixture given the plan
+            reduced_mixture = argmin_mixture(large_mixture, plan, X_val);
 
             %Check for convergence
             converged = abs(transportdis - prev_transportdis) < options.DME_tol;
@@ -150,7 +150,7 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
 
         gatingProb = squeeze(sum(plan,1))';
         gatingProb = gatingProb./sum(gatingProb,2);
-        log_Phi_y  = -0.5*log(2*pi) - 0.5*log(reduced_MoE.variances) -0.5*((Y_val - X_val*reduced_MoE.experts).^2)./reduced_MoE.variances;
+        log_Phi_y  = -0.5*log(2*pi) - 0.5*log(reduced_mixture.variances) -0.5*((Y_val - X_val*reduced_mixture.experts).^2)./reduced_mixture.variances;
         log_Phi_xy = log(gatingProb) + log_Phi_y;
         log_sum_PhixPhiy = logsumexp(log_Phi_xy,2);
         loglik           = sum(log_sum_PhixPhiy);
@@ -162,10 +162,10 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
         Tau     = Tau./(sum(Tau,2)*ones(1,K));
         
         %initial_gate = gate_; %i.e. gate of the last machine
-        initial_gate = reshape(mean(large_MoE.gates,2), d+1, K);
+        initial_gate = reshape(mean(large_mixture.gates,2), d+1, K);
         
         res = IRLS(X_val, Tau, initial_gate(:,1:end-1), ones(S,1), 10000, 1e-8, 0);
-        reduced_MoE.gates = [res.W zeros(d+1,1)];
+        reduced_mixture.gates = [res.W zeros(d+1,1)];
 
 
         
@@ -177,17 +177,17 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
             solution.best_dis = best_transportdis;
             solution.plan     = plan;
             
-            solution.param.alpha0 = reduced_MoE.gates(1,:);
-            solution.param.Alpha  = reduced_MoE.gates(2:end,:);
-            solution.param.beta0  = reduced_MoE.experts(1,:);
-            solution.param.Beta   = reduced_MoE.experts(2:end,:);
-            solution.param.sigma2 = reduced_MoE.variances;
+            solution.param.alpha0 = reduced_mixture.gates(1,:);
+            solution.param.Alpha  = reduced_mixture.gates(2:end,:);
+            solution.param.beta0  = reduced_mixture.experts(1,:);
+            solution.param.Beta   = reduced_mixture.experts(2:end,:);
+            solution.param.sigma2 = reduced_mixture.variances;
             
-            solution.gates        = reduced_MoE.gates;
-            solution.experts      = reduced_MoE.experts;
-            solution.variances    = reduced_MoE.variances;
+            solution.gates        = reduced_mixture.gates;
+            solution.experts      = reduced_mixture.experts;
+            solution.variances    = reduced_mixture.variances;
 
-            solution.reduced_MoE        = reduced_MoE; %Solution
+            solution.reduced_mixture        = reduced_mixture; %Solution
             solution.stats.stored_loglik    = stored_loglik;
             solution.stats.stored_distances = stored_distances;
             solution.stats.loglik_on_supporting_data = loglik;
@@ -203,7 +203,7 @@ function solution = Distributed_MixtureOfExperts_Gaussian(X, Y, K, M, options)
     solution.local_times     = local_times;
     solution.reduction_time  = reduction_time;
     solution.learning_time   = max(local_times) + reduction_time;
-    solution.large_MoE   = large_MoE;
+    solution.large_mixture   = large_mixture;
     solution.local_estimates = local_estimates;
     solution.X_val = X_val;
     solution.Y_val = Y_val;
@@ -224,15 +224,15 @@ end %function
 
 
 
-function reduced_MoE = argmin_MoE(large_MoE, plan, X_val)
+function reduced_mixture = argmin_mixture(large_mixture, plan, X_val)
 
     [~,d] = size(X_val);
     [L,K,S] = size(plan);
-    B = large_MoE.experts;
-    V = large_MoE.variances';
-    reduced_MoE.experts = zeros(d,K);
-    reduced_MoE.gates   = zeros(d,K);
-    reduced_MoE.variances = zeros(1,K);
+    B = large_mixture.experts;
+    V = large_mixture.variances';
+    reduced_mixture.experts = zeros(d,K);
+    reduced_mixture.gates   = zeros(d,K);
+    reduced_mixture.variances = zeros(1,K);
     %idx = repmat([1:K],L/K);
     for k = 1:K
 
@@ -243,11 +243,11 @@ function reduced_MoE = argmin_MoE(large_MoE, plan, X_val)
         beta_k  = inv(X_val'*Dk*X_val)*X_val'* (X_val .* WkB)*ones(d,1);
         sigma_k = (V' * Wk * ones(S,1) + ones(1,L)*(Wk .* ((beta_k - B)' * X_val')) * X_val * (beta_k - B)*ones(L,1)) / trace(Dk);
         
-        reduced_MoE.experts(:,k)   = beta_k;
-        reduced_MoE.variances(:,k) = sigma_k;
+        reduced_mixture.experts(:,k)   = beta_k;
+        reduced_mixture.variances(:,k) = sigma_k;
         
     end
-    reduced_MoE.weights = ones(1,K);
+    reduced_mixture.weights = ones(1,K);
 
 end
 

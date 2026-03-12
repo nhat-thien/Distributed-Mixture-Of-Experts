@@ -1,20 +1,20 @@
-function tran_dis = transportation_divergence(large_mixture, reduced_mixture, plan, X_val)
+function tran_dis = transportation_divergence(large_MoE, reduced_MoE, plan, X_val)
 
     [n, d] = size(X_val);
-    KM  = length(large_mixture.variances);
-    K   = length(reduced_mixture.variances);
+    KM  = length(large_MoE.variances);
+    K   = length(reduced_MoE.variances);
     tran_dis = [];
     
 
     for l=1:KM
         
-        expert1.xBeta  = large_mixture.experts(:,l);
-        expert1.sigma2 = large_mixture.variances(l);
+        expert1.xBeta  = large_MoE.experts(:,l);
+        expert1.sigma2 = large_MoE.variances(l);
         
         for k=1:K
             
-            expert2.xBeta =  reduced_mixture.experts(:,k);
-            expert2.sigma2 = reduced_mixture.variances(k);
+            expert2.xBeta =  reduced_MoE.experts(:,k);
+            expert2.sigma2 = reduced_MoE.variances(k);
             
             [~, KLdisvec] = KL_divergence(expert1, expert2, X_val);
             

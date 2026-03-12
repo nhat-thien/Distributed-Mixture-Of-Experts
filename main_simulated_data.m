@@ -36,9 +36,9 @@ end
 
 %% PRINT ------------------------------------------------------------------
 fprintf('On training data\n') 
-[~, ~] = compute_metrics(fit, true_mixture, X_train, Y_train, true_labels(1:N), 1);
+[~, ~] = compute_metrics(fit, true_MoE, X_train, Y_train, true_labels(1:N), 1);
 fprintf('On testing data \n') 
-[~, prediction] = compute_metrics(fit, true_mixture, X_test, Y_test, true_labels(N+1:n), 1);
+[~, prediction] = compute_metrics(fit, true_MoE, X_test, Y_test, true_labels(N+1:n), 1);
 
 %% PLOT -------------------------------------------------------------------
 close all
