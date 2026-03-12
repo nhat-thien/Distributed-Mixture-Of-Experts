@@ -36,4 +36,7 @@ Adjusted RI    : 0.825
 ClusteringErr  : 7.582 (%)
 ```
 ## References
-[1] "Optimal Transport Aggregation for Distributed Mixture-of-Experts", March, 2026.
+[1] Faïcel Chamroukhi, Nhat Thien Pham.  
+*Optimal Transport Aggregation for Distributed Mixture-of-Experts*.  
+arXiv:2312.09877, 2026.  
+[https://arxiv.org/abs/2312.09877](https://arxiv.org/abs/2312.09877)
