@@ -53,7 +53,3 @@ function [plan, distance_matrix] = argmin_transportation_plan(large_MoE, reduced
     end
     
 end
-
-
-
-MoE
