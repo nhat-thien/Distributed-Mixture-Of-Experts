@@ -1,5 +1,5 @@
 # Optimal Transport Aggregation for Distributed Mixture-of-Experts
-Matlab source codes for the "Optimal Transport Aggregation for Distributed Mixture-of-Experts" [https://arxiv.org/pdf/2312.09877](https://arxiv.org/pdf/2312.09877) [1]
+Matlab source codes for the "Optimal Transport Aggregation for Distributed Mixture-of-Experts".
 
 ## Environment
 Matlab R2018b. In our code, we also used `parfor` loop which requires there are more than one core to be affect. To check the number of physical cores, in Command Window, run `evalc("feature('numcores')")`
@@ -35,5 +35,3 @@ Rand Index (RI): 0.941
 Adjusted RI    : 0.825 
 ClusteringErr  : 7.582 (%)
 ```
-## References
-[1] Faïcel Chamroukhi, Nhat Thien Pham. *Optimal Transport Aggregation for Distributed Mixture-of-Experts*. arXiv:2312.09877, 2026. [https://arxiv.org/pdf/2312.09877](https://arxiv.org/pdf/2312.09877)
